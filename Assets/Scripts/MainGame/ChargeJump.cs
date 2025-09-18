@@ -1,9 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class ChargeJump : MonoBehaviour
 {
+    public UnityEvent finishJump;
+
+
     [SerializeField] private Camera mainCamera;
     private InputAction chargeJumpAction; //New input action for jump (InputSystem/Player/Jump)
     [SerializeField] private float maxChargeTime = 2.0f; 
@@ -16,7 +20,7 @@ public class ChargeJump : MonoBehaviour
     private Rigidbody2D rb;
     private bool cameraFollow = false;
 
-    public float normalizedJumpProgress = 0f;
+    
 
 
     void Start()
@@ -55,6 +59,7 @@ public class ChargeJump : MonoBehaviour
             if(Mathf.Abs(mainCamera.transform.position.y - targetPosition.y) < 0.1f)
             {
                 cameraFollow = false; //Stop following when close enough
+                finishJump.Invoke(); //Invoke finish jump event
             }
         }
     }
@@ -67,6 +72,11 @@ public class ChargeJump : MonoBehaviour
         {
             cameraFollow = true;
         }
+    }
+
+    public float GetNormalizedCharge()
+    {
+        return (currentChargeTime / maxChargeTime);
     }
 
 }
