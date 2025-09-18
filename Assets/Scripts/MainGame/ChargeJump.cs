@@ -16,6 +16,9 @@ public class ChargeJump : MonoBehaviour
     private Rigidbody2D rb;
     private bool cameraFollow = false;
 
+    public float normalizedJumpProgress = 0f;
+
+
     void Start()
     {
         chargeJumpAction = InputSystem.actions.FindAction("Jump"); //Get action for jump (left mouse)
@@ -24,7 +27,7 @@ public class ChargeJump : MonoBehaviour
 
     void Update()
     {
-        if (chargeJumpAction.IsPressed()) //Charging Jump
+        if (chargeJumpAction.IsPressed() && !cameraFollow) //Charging Jump while camera not following
         {
             //Debug.Log("Charging");
             if(currentChargeTime < maxChargeTime)
