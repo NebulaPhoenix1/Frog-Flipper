@@ -8,7 +8,6 @@ public class PlayerPrefsEditor :  EditorWindow
 { 
     float highscore = 0f;
 
-
     [MenuItem("Edit/Player Preferences")]
     public static void openWindow()
     {
