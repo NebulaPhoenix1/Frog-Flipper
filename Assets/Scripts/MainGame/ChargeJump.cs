@@ -52,10 +52,16 @@ public class ChargeJump : MonoBehaviour
         {
             //Using trigonometry to calculate jump X direction based on where mouse is
             //We have Opposite (mouse Y - player Y) and adjacent (mouse X - player X)
+            if (mousePosition.y < playerScreenPosition.y) //Constrain to only jump upwards
+            {
+                float temp = mousePosition.y;
+                mousePosition.y = playerScreenPosition.y;
+                playerScreenPosition.y = temp;
+            }
             float opposite = mousePosition.y - playerScreenPosition.y;
             float adjacent = mousePosition.x - playerScreenPosition.x;
-            float angleRadians = Mathf.Atan2(opposite, adjacent); //Angle in radians
-            float angleDegrees =  angleRadians * Mathf.Rad2Deg; //Convert to degrees if needed
+            float angleRadians = Mathf.Abs(Mathf.Atan2(opposite, adjacent)); //Angle in radians
+            float angleDegrees =  Mathf.Abs(angleRadians * Mathf.Rad2Deg); //Convert to degrees if needed
             Debug.Log("Angle: " + angleDegrees + " radians: " + angleRadians);
 
             Vector2 jumpDirection =new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
