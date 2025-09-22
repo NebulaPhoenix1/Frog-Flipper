@@ -20,7 +20,8 @@ public class ChargeJump : MonoBehaviour
     private Rigidbody2D rb;
     private bool cameraFollow = false;
 
-    
+    private Vector2 mousePosition;
+    private Vector2 playerScreenPosition;
 
 
     void Start()
@@ -31,10 +32,14 @@ public class ChargeJump : MonoBehaviour
 
     void Update()
     {
+        mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
+        playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position); //Screen space position of player
+        //Debug.Log("Mouse: " + mousePosition + " Player: " + playerScreenPosition);
+
         if (chargeJumpAction.IsPressed() && !cameraFollow) //Charging Jump while camera not following
         {
             //Debug.Log("Charging");
-            if(currentChargeTime < maxChargeTime)
+            if (currentChargeTime < maxChargeTime)
             {
                 currentChargeTime += Time.deltaTime; //Increase charge time
             }
@@ -45,10 +50,20 @@ public class ChargeJump : MonoBehaviour
         }
         else if (chargeJumpAction.WasReleasedThisFrame()) //Jump Released
         {
+            //Using trigonometry to calculate jump X direction based on where mouse is
+            //We have Opposite (mouse Y - player Y) and adjacent (mouse X - player X)
+            float opposite = mousePosition.y - playerScreenPosition.y;
+            float adjacent = mousePosition.x - playerScreenPosition.x;
+            float angleRadians = Mathf.Atan2(opposite, adjacent); //Angle in radians
+            float angleDegrees =  angleRadians * Mathf.Rad2Deg; //Convert to degrees if needed
+            Debug.Log("Angle: " + angleDegrees + " radians: " + angleRadians);
+
+            Vector2 jumpDirection =new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
+
             //Debug.Log("Released");
             float jumpForce = Mathf.Lerp(minJumpForce, maxJumpForce, currentChargeTime / maxChargeTime); //Calculate jump force based on charge time
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); //Apply jump force 
-            StartCoroutine(JumpForceStop());
+            rb.linearVelocity = jumpDirection * jumpForce; //Apply jump force 
+            StartCoroutine(JumpForceStop(currentChargeTime));
             currentChargeTime = 0.0f; //Reset charge time
         }
         if(cameraFollow)
@@ -64,10 +79,10 @@ public class ChargeJump : MonoBehaviour
         }
     }
 
-    private IEnumerator JumpForceStop()
+    private IEnumerator JumpForceStop(float chargeTime)
     {
-        yield return new WaitForSeconds(jumpStopDelay * currentChargeTime);
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); //Stop upward movement after delay
+        yield return new WaitForSeconds(jumpStopDelay * chargeTime);
+        rb.linearVelocity = Vector2.zero; //Stop upward movement after delay
         if (mainCamera)
         {
             cameraFollow = true;
