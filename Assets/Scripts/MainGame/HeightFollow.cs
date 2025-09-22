@@ -7,6 +7,6 @@ public class HeightFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector2(transformToFollow.position.x, transformToFollow.position.y);
+        transform.position = new Vector2(transform.position.x, transformToFollow.position.y);
     }
 }
