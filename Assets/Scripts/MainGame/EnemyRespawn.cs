@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class EnemyRespawn : MonoBehaviour
 {
-    [SerializeField] private bool isStatic;
-    private int screenHalfWidthMeters;
-    private int screenHalfHeightMeters;
-    private int minExtraRespawnHeight = 2;
-    private int maxExtraRespawnHeight = 5;
+    private float screenHalfWidthMeters;
+    private float screenHalfHeightMeters;
+    private float minExtraRespawnHeight = 2.0f;
+    private float maxExtraRespawnHeight = 5.0f;
     private GameObject camera;
 
     private void Start()
     {
-        screenHalfWidthMeters = (int)(Camera.main.orthographicSize * Camera.main.aspect);
-        screenHalfHeightMeters = (int)(Camera.main.orthographicSize);
+        screenHalfWidthMeters = (Camera.main.orthographicSize * Camera.main.aspect);
+        screenHalfHeightMeters = (Camera.main.orthographicSize);
         camera = GameObject.Find("Main Camera");
-        //Debug.Log(screenWidthMeters + "m");
+        Debug.Log(screenHalfWidthMeters + "m" + screenHalfHeightMeters + "m");
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -28,7 +27,7 @@ public class EnemyRespawn : MonoBehaviour
             //We need to add camera Y pos to random Y to ensure respawn is always above camera
             float randomY = Random.Range(screenHalfHeightMeters + minExtraRespawnHeight, screenHalfHeightMeters + maxExtraRespawnHeight) + camera.transform.position.y;
             collision.transform.position = new Vector2(randomX, randomY);
-            Debug.Log(transform.position);
+            Debug.Log(randomX + " " + randomY);
         }
     }
 }

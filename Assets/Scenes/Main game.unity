@@ -921,9 +921,9 @@ GameObject:
   m_Component:
   - component: {fileID: 610159034}
   - component: {fileID: 610159033}
-  - component: {fileID: 610159032}
   - component: {fileID: 610159031}
   - component: {fileID: 610159036}
+  - component: {fileID: 610159037}
   m_Layer: 0
   m_Name: StaticEnemy
   m_TagString: Enemy
@@ -967,18 +967,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &610159032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610159030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d208f030912f1d45990ecfe3a248a67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!212 &610159033
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1079,6 +1067,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &610159037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610159030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c7e911b891a4b729b371de54f60a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  isStatic: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
