@@ -15,7 +15,7 @@ public class ChargeJump : MonoBehaviour
     [SerializeField] private float maxJumpForce = 20.0f;
     [SerializeField] private float jumpStopDelay = 0.1f; //Delay before jump force stops being applied
     [SerializeField] private float cameraPlayerYOffset = 4.0f; //Camera offset on Y axis when following player
-    private float cameraLerpSpeed = 0.01f;
+    [SerializeField] private float cameraLerpSpeed = 0.01f;
     private float currentChargeTime = 0.0f; //How long current jump has been charged
     private Rigidbody2D rb;
     private bool cameraFollow = false;

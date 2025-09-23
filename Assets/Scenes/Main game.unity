@@ -1809,6 +1809,7 @@ MonoBehaviour:
   maxJumpForce: 20
   jumpStopDelay: 0.1
   cameraPlayerYOffset: 4
+  cameraLerpSpeed: 0.1
 --- !u!114 &849401583
 MonoBehaviour:
   m_ObjectHideFlags: 0
