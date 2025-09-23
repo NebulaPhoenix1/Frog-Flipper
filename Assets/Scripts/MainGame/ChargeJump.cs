@@ -43,14 +43,14 @@ public class ChargeJump : MonoBehaviour
         else
         {
             mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
-            //Debug.Log("Mouse detected, mouse pos: " + mousePosition);
+            Debug.Log("Mouse detected, mouse pos: " + mousePosition);
         }
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        /*if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
         {
             mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
             Debug.Log("Touchscreen detected, touched pos: " + mousePosition);
         }
-        /*else
+        else
         {
             mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
             Debug.Log("Mouse detected, mouse pos: " + mousePosition);

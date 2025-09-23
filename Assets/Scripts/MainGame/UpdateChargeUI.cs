@@ -24,6 +24,11 @@ public class UpdateChargeUI : MonoBehaviour
             {
                 transform.position = Touchscreen.current.primaryTouch.position.ReadValue();
             }
+            else if(Touchscreen.current != null) //If touchscreen and not pressing, hide charge UI
+            {
+                fillImage.enabled = false;
+                return;
+            }
             else
             {
                 transform.position = Mouse.current.position.ReadValue();
