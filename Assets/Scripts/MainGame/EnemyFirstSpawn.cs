@@ -6,7 +6,7 @@ public class EnemyFirstSpawn : MonoBehaviour
     private int screenHalfWidthMeters;
     private int screenHalfHeightMeters;
     private int minExtraRespawnHeight = 1;
-    private int maxExtraRespawnHeight = 3;
+    private int maxExtraRespawnHeight = 6;
     private GameObject camera;
 
     void Start()

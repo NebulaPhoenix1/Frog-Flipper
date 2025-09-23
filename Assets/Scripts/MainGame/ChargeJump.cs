@@ -7,7 +7,7 @@ public class ChargeJump : MonoBehaviour
 {
     public UnityEvent finishJump;
 
-
+    [SerializeField] private bool touchInputTesting;
     [SerializeField] private Camera mainCamera;
     private InputAction chargeJumpAction; //New input action for jump (InputSystem/Player/Jump)
     [SerializeField] private float maxChargeTime = 2.0f; 
@@ -32,7 +32,30 @@ public class ChargeJump : MonoBehaviour
 
     void Update()
     {
-        mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
+        if(touchInputTesting)
+        {
+            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+            {
+                mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
+                Debug.Log("Touchscreen detected, touched pos: " + mousePosition);
+            }
+        }
+        else
+        {
+            mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
+            //Debug.Log("Mouse detected, mouse pos: " + mousePosition);
+        }
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
+            Debug.Log("Touchscreen detected, touched pos: " + mousePosition);
+        }
+        /*else
+        {
+            mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
+            Debug.Log("Mouse detected, mouse pos: " + mousePosition);
+
+        }*/
         playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position); //Screen space position of player
         //Debug.Log("Mouse: " + mousePosition + " Player: " + playerScreenPosition);
 

@@ -73,7 +73,7 @@
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -382,6 +382,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4e2bd08-fea3-4a23-b095-d538534bb333",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "Hold(duration=0.01)",
+                    "processors": "",
+                    "groups": ";Touch",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false

@@ -19,7 +19,16 @@ public class UpdateChargeUI : MonoBehaviour
     {
         if (chargeJump.GetNormalizedCharge() >= 0f)
         {
-            transform.position = Mouse.current.position.ReadValue();
+            //Check if touch input
+            if(Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+            {
+                transform.position = Touchscreen.current.primaryTouch.position.ReadValue();
+            }
+            else
+            {
+                transform.position = Mouse.current.position.ReadValue();
+            }
+            //transform.position = Mouse.current.position.ReadValue();
             fillImage.enabled = true;
             fillImage.fillAmount = chargeJump.GetNormalizedCharge();
         }

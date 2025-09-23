@@ -4,8 +4,8 @@ public class EnemyRespawn : MonoBehaviour
 {
     private float screenHalfWidthMeters;
     private float screenHalfHeightMeters;
-    private float minExtraRespawnHeight = 2.0f;
-    private float maxExtraRespawnHeight = 5.0f;
+    private float minExtraRespawnHeight = 0.5f;
+    private float maxExtraRespawnHeight = 7.0f;
     private GameObject camera;
 
     [SerializeField] private GameObject staticEnemyPrefab;
