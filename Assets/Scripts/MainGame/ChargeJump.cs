@@ -62,7 +62,7 @@ public class ChargeJump : MonoBehaviour
             float adjacent = mousePosition.x - playerScreenPosition.x;
             float angleRadians = Mathf.Abs(Mathf.Atan2(opposite, adjacent)); //Angle in radians
             float angleDegrees =  Mathf.Abs(angleRadians * Mathf.Rad2Deg); //Convert to degrees if needed
-            Debug.Log("Angle: " + angleDegrees + " radians: " + angleRadians);
+            //Debug.Log("Angle: " + angleDegrees + " radians: " + angleRadians);
 
             Vector2 jumpDirection =new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
 

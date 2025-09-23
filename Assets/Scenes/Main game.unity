@@ -924,7 +924,6 @@ GameObject:
   - component: {fileID: 610159032}
   - component: {fileID: 610159031}
   - component: {fileID: 610159036}
-  - component: {fileID: 610159037}
   m_Layer: 0
   m_Name: StaticEnemy
   m_TagString: Enemy
@@ -1080,19 +1079,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &610159037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610159030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93c33736490af46da918503d865c5f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  isStatic: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1664,6 +1650,7 @@ GameObject:
   m_Component:
   - component: {fileID: 993065234}
   - component: {fileID: 993065235}
+  - component: {fileID: 993065236}
   m_Layer: 0
   m_Name: ResetZone
   m_TagString: Respawn
@@ -1732,6 +1719,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 5.631119, y: 3.8665028}
   m_EdgeRadius: 0
+--- !u!114 &993065236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993065233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c33736490af46da918503d865c5f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyRespawn
+  isStatic: 0
 --- !u!1 &1032445771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2349,7 +2349,7 @@ Transform:
   m_GameObject: {fileID: 1689687360}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.80628, y: 5.5877905, z: 0}
+  m_LocalPosition: {x: 5.80628, y: 4.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
