@@ -8,6 +8,10 @@ public class EnemyRespawn : MonoBehaviour
     private float maxExtraRespawnHeight = 5.0f;
     private GameObject camera;
 
+    [SerializeField] private GameObject staticEnemyPrefab;
+    [SerializeField] private int respawnRate = 5; //Number of respawns before spawning new enemy
+    private int respawnCount = 0;
+
     private void Start()
     {
         screenHalfWidthMeters = (Camera.main.orthographicSize * Camera.main.aspect);
@@ -27,7 +31,14 @@ public class EnemyRespawn : MonoBehaviour
             //We need to add camera Y pos to random Y to ensure respawn is always above camera
             float randomY = Random.Range(screenHalfHeightMeters + minExtraRespawnHeight, screenHalfHeightMeters + maxExtraRespawnHeight) + camera.transform.position.y;
             collision.transform.position = new Vector2(randomX, randomY);
-            Debug.Log(randomX + " " + randomY);
+            //Debug.Log(randomX + " " + randomY);
+            respawnCount++;
+            if (respawnCount >= respawnRate)
+            {
+                respawnCount = 0;
+                //Spawn new enemy off screen, should teleport due to EnemyFirstSpawn script
+                Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity );
+            }
         }
     }
 }
