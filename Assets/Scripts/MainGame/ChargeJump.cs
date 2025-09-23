@@ -28,6 +28,12 @@ public class ChargeJump : MonoBehaviour
     {
         chargeJumpAction = InputSystem.actions.FindAction("Jump"); //Get action for jump (left mouse)
         rb = GetComponent<Rigidbody2D>();
+
+        //If on IOS/Android, force touch input testing
+        if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
+        {
+            touchInputTesting = true;
+        }
     }
 
     void Update()
