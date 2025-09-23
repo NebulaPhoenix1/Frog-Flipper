@@ -17,12 +17,12 @@ public class EnemyRespawn : MonoBehaviour
         screenHalfWidthMeters = (Camera.main.orthographicSize * Camera.main.aspect);
         screenHalfHeightMeters = (Camera.main.orthographicSize);
         camera = GameObject.Find("Main Camera");
-        Debug.Log(screenHalfWidthMeters + "m" + screenHalfHeightMeters + "m");
+        //Debug.Log(screenHalfWidthMeters + "m" + screenHalfHeightMeters + "m");
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collision with: " + collision.name);
+        //Debug.Log("Collision with: " + collision.name);
         if (collision.CompareTag("Enemy")) //If enemy hits respawn trigger
         {
             //Debug.Log("Respawn Triggered");
@@ -37,7 +37,7 @@ public class EnemyRespawn : MonoBehaviour
             {
                 respawnCount = 0;
                 //Spawn new enemy off screen, should teleport due to EnemyFirstSpawn script
-                Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity );
+                Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity);
             }
         }
     }
