@@ -13,6 +13,8 @@ public class UpdateChargeUI : MonoBehaviour
     private float minDisplayDistance;
     private float maxDisplayDistance;
 
+    private LineRenderer lineRenderer;
+
     [SerializeField] private float minDisplayDistancePercent = 0.1f;
     [SerializeField] private float maxDisplayDistancePercent = 0.3f;
 
@@ -26,6 +28,7 @@ public class UpdateChargeUI : MonoBehaviour
         chargeJump = FindFirstObjectByType<ChargeJump>();
         camera = Camera.main;
         playerTransform = chargeJump.transform;
+        lineRenderer = GetComponent<LineRenderer>();
         //Calculate min and max display distance based on screen size
         float shortestSide = Mathf.Min(Screen.width, Screen.height);
         minDisplayDistance = shortestSide * minDisplayDistancePercent;
@@ -53,17 +56,26 @@ public class UpdateChargeUI : MonoBehaviour
                 //transform.position = Mouse.current.position.ReadValue();
                 inputPosition = Mouse.current.position.ReadValue();
             }
+            lineRenderer.enabled = true; 
             Vector2 playerScreenPosition = camera.WorldToScreenPoint(playerTransform.position);
             Vector2 direction = inputPosition - playerScreenPosition;
             //Change position based on charge amount
             float currentDistance = Mathf.Lerp(minDisplayDistance, maxDisplayDistance, chargeJump.GetNormalizedCharge());
             Vector2 targetPosition = playerScreenPosition + (direction.normalized * currentDistance);
+            
+            Vector2 lineEndPos = new Vector2(targetPosition.x, targetPosition.y);
+            Vector2 lineStartPos = new Vector2(playerScreenPosition.x, playerScreenPosition.y);
+            lineRenderer.SetPositions(new Vector3[] { lineStartPos, lineEndPos });
             transform.position = targetPosition;
             //transform.position = Mouse.current.position.ReadValue();
 
             fillImage.enabled = true;
             fillImage.fillAmount = chargeJump.GetNormalizedCharge();
         }
-        else { fillImage.enabled = false; }
+        else
+        {
+            fillImage.enabled = false;
+            lineRenderer.enabled = false;
+        }
     }
 }

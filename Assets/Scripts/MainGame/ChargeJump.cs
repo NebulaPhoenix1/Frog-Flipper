@@ -24,11 +24,13 @@ public class ChargeJump : MonoBehaviour
     private Vector2 mousePosition;
     private Vector2 playerScreenPosition;
 
+    private LineRenderer lineRenderer; //Shows where the player is aiming. Gets disabled, enabled and updated positions for every
 
     void Start()
     {
         chargeJumpAction = InputSystem.actions.FindAction("Jump"); //Get action for jump (left mouse)
         rb = GetComponent<Rigidbody2D>();
+        lineRenderer = GetComponent<LineRenderer>();
 
         //If on IOS/Android, force touch input testing
         if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
@@ -79,17 +81,32 @@ public class ChargeJump : MonoBehaviour
             {
                 currentChargeTime = maxChargeTime; //Clamp to max charge time
             }
+
+            //Line renderer logic
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, transform.position); //Start at player position
+            //Getting direction for end point
+            Vector2 directionToMouse = mousePosition - playerScreenPosition; 
+            Vector2 aimDirection = -directionToMouse.normalized; //Direction from player to mouse
+            
+            float lineLength = GetNormalizedCharge() * 5.0f; //5.0 is arboitary for visualisation
+            Vector3 lineEndPosition = transform.position + (Vector3)(aimDirection * lineLength);  
+            lineRenderer.SetPosition(1, lineEndPosition); //End at jump direction scaled by charge amount
+
         }
         else if (chargeJumpAction.WasReleasedThisFrame()) //Jump Released
         {
+            lineRenderer.enabled = false; //Disable line renderer on jump   
+            
             //Using trigonometry to calculate jump X direction based on where mouse is
             //We have Opposite (mouse Y - player Y) and adjacent (mouse X - player X)
             //Get the vector pointing from the player to the mouse and normalise for direction 
             Vector2 directionToMouse = mousePosition - playerScreenPosition;
             Vector2 jumpDirection = -directionToMouse.normalized; //Opposite direction for slingshot effect
+
             float jumpForce = Mathf.Lerp(minJumpForce, maxJumpForce, currentChargeTime / maxChargeTime);
             rb.linearVelocity = jumpDirection * jumpForce;
-            
+
             StartCoroutine(JumpForceStop(currentChargeTime));
             currentChargeTime = 0.0f;
         }
@@ -164,7 +181,7 @@ public class ChargeJump : MonoBehaviour
     private void CameraFollowLogic()
     {
         //Camera follows player *after* the jump
-        Vector3 targetPosition = new Vector3(mainCamera.transform.position.x, transform.position.y + cameraPlayerYOffset, mainCamera.transform.position.z);
+        Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + cameraPlayerYOffset, mainCamera.transform.position.z);
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, cameraLerpSpeed);
         if (Mathf.Abs(mainCamera.transform.position.y - targetPosition.y) < 0.1f)
         {
