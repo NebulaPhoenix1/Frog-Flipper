@@ -1494,7 +1494,7 @@ GameObject:
   - component: {fileID: 849401583}
   - component: {fileID: 849401584}
   - component: {fileID: 849401585}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1527,7 +1527,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &849401580
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1673,6 +1673,9 @@ MonoBehaviour:
   cameraPlayerYOffset: 2
   cameraLerpSpeed: 0.1
   slingShotMode: 1
+  slingshotRaycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 51
 --- !u!114 &849401583
 MonoBehaviour:
   m_ObjectHideFlags: 0

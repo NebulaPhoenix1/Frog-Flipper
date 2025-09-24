@@ -17,6 +17,7 @@ public class ChargeJump : MonoBehaviour
     [SerializeField] private float cameraPlayerYOffset = -10.0f; //Camera offset on Y axis when following player
     [SerializeField] private float cameraLerpSpeed = 0.01f;
     [SerializeField] private bool slingShotMode = false; //If true, jump direction is opposite to mouse/touch position
+    [SerializeField] private LayerMask slingshotRaycastLayerMask; //Layer mask for raycast in slingshot mode (layers we want the raycast to hit)
     private float currentChargeTime = 0.0f; //How long current jump has been charged
     private Rigidbody2D rb;
     private bool cameraFollow = false;
@@ -88,11 +89,20 @@ public class ChargeJump : MonoBehaviour
             //Getting direction for end point
             Vector2 directionToMouse = mousePosition - playerScreenPosition; 
             Vector2 aimDirection = -directionToMouse.normalized; //Direction from player to mouse
-            
-            float lineLength = GetNormalizedCharge() * 5.0f; //5.0 is arboitary for visualisation
-            Vector3 lineEndPosition = transform.position + (Vector3)(aimDirection * lineLength);  
-            lineRenderer.SetPosition(1, lineEndPosition); //End at jump direction scaled by charge amount
 
+            //Check with raycast if there is anything in the way 
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, aimDirection, GetNormalizedCharge() * 5.0f, slingshotRaycastLayerMask);
+            if (hit.collider != null) //If raycast hits something that isnt player
+            {
+                lineRenderer.SetPosition(1, hit.point); //End at hit point if something is hit
+                return;
+            }
+            else
+            {
+                float lineLength = GetNormalizedCharge() * 5.0f; //5.0 is arboitary for visualisation
+                Vector3 lineEndPosition = transform.position + (Vector3)(aimDirection * lineLength);  
+                lineRenderer.SetPosition(1, lineEndPosition); //End at jump direction scaled by charge amount
+            }
         }
         else if (chargeJumpAction.WasReleasedThisFrame()) //Jump Released
         {
