@@ -14,8 +14,9 @@ public class ChargeJump : MonoBehaviour
     [SerializeField] private float minJumpForce = 5.0f;
     [SerializeField] private float maxJumpForce = 20.0f;
     [SerializeField] private float jumpStopDelay = 0.1f; //Delay before jump force stops being applied
-    [SerializeField] private float cameraPlayerYOffset = 4.0f; //Camera offset on Y axis when following player
+    [SerializeField] private float cameraPlayerYOffset = -10.0f; //Camera offset on Y axis when following player
     [SerializeField] private float cameraLerpSpeed = 0.01f;
+    [SerializeField] private bool slingShotMode = false; //If true, jump direction is opposite to mouse/touch position
     private float currentChargeTime = 0.0f; //How long current jump has been charged
     private Rigidbody2D rb;
     private bool cameraFollow = false;
@@ -38,7 +39,20 @@ public class ChargeJump : MonoBehaviour
 
     void Update()
     {
-        if(touchInputTesting)
+        //Classic Mode (jump towards mouse/touch)
+        if (!slingShotMode)
+        {
+            ClassicJump();
+        }
+        else
+        {
+            SlingShotJump();
+        }
+    }
+
+    private void SlingShotJump()
+    {
+        if (touchInputTesting)
         {
             if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
             {
@@ -51,17 +65,55 @@ public class ChargeJump : MonoBehaviour
             mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
             //Debug.Log("Mouse detected, mouse pos: " + mousePosition);
         }
-        /*if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position); //Screen space position of player
+        //Debug.Log("Mouse: " + mousePosition + " Player: " + playerScreenPosition);
+
+        if (chargeJumpAction.IsPressed() && !cameraFollow) //Charging Jump while camera not following
         {
-            mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
-            Debug.Log("Touchscreen detected, touched pos: " + mousePosition);
+            //Debug.Log("Charging");
+            if (currentChargeTime < maxChargeTime)
+            {
+                currentChargeTime += Time.deltaTime; //Increase charge time
+            }
+            else
+            {
+                currentChargeTime = maxChargeTime; //Clamp to max charge time
+            }
+        }
+        else if (chargeJumpAction.WasReleasedThisFrame()) //Jump Released
+        {
+            //Using trigonometry to calculate jump X direction based on where mouse is
+            //We have Opposite (mouse Y - player Y) and adjacent (mouse X - player X)
+            //Get the vector pointing from the player to the mouse and normalise for direction 
+            Vector2 directionToMouse = mousePosition - playerScreenPosition;
+            Vector2 jumpDirection = -directionToMouse.normalized; //Opposite direction for slingshot effect
+            float jumpForce = Mathf.Lerp(minJumpForce, maxJumpForce, currentChargeTime / maxChargeTime);
+            rb.linearVelocity = jumpDirection * jumpForce;
+            
+            StartCoroutine(JumpForceStop(currentChargeTime));
+            currentChargeTime = 0.0f;
+        }
+        if (cameraFollow)
+        {
+            CameraFollowLogic();
+        }
+    }
+
+    private void ClassicJump()
+    {
+        if (touchInputTesting)
+        {
+            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+            {
+                mousePosition = Touchscreen.current.primaryTouch.position.ReadValue();
+                //Debug.Log("Touchscreen detected, touched pos: " + mousePosition);
+            }
         }
         else
         {
             mousePosition = Mouse.current.position.ReadValue(); //Screen space position of mouse
-            Debug.Log("Mouse detected, mouse pos: " + mousePosition);
-
-        }*/
+                                                                //Debug.Log("Mouse detected, mouse pos: " + mousePosition);
+        }
         playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position); //Screen space position of player
         //Debug.Log("Mouse: " + mousePosition + " Player: " + playerScreenPosition);
 
@@ -90,10 +142,10 @@ public class ChargeJump : MonoBehaviour
             float opposite = mousePosition.y - playerScreenPosition.y;
             float adjacent = mousePosition.x - playerScreenPosition.x;
             float angleRadians = Mathf.Abs(Mathf.Atan2(opposite, adjacent)); //Angle in radians
-            float angleDegrees =  Mathf.Abs(angleRadians * Mathf.Rad2Deg); //Convert to degrees if needed
+            float angleDegrees = Mathf.Abs(angleRadians * Mathf.Rad2Deg); //Convert to degrees if needed
             //Debug.Log("Angle: " + angleDegrees + " radians: " + angleRadians);
 
-            Vector2 jumpDirection =new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
+            Vector2 jumpDirection = new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
 
             //Debug.Log("Released");
             float jumpForce = Mathf.Lerp(minJumpForce, maxJumpForce, currentChargeTime / maxChargeTime); //Calculate jump force based on charge time
@@ -101,16 +153,23 @@ public class ChargeJump : MonoBehaviour
             StartCoroutine(JumpForceStop(currentChargeTime));
             currentChargeTime = 0.0f; //Reset charge time
         }
-        if(cameraFollow)
+        if (cameraFollow)
         {
-            //Camera follows player *after* the jump
-            Vector3 targetPosition = new Vector3(mainCamera.transform.position.x, transform.position.y + cameraPlayerYOffset, mainCamera.transform.position.z);
-            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, cameraLerpSpeed);
-            if(Mathf.Abs(mainCamera.transform.position.y - targetPosition.y) < 0.1f)
-            {
-                cameraFollow = false; //Stop following when close enough
-                finishJump.Invoke(); //Invoke finish jump event
-            }
+            CameraFollowLogic();
+        }
+    }
+
+    /* Camera smoothly travels up after the jump*/
+
+    private void CameraFollowLogic()
+    {
+        //Camera follows player *after* the jump
+        Vector3 targetPosition = new Vector3(mainCamera.transform.position.x, transform.position.y + cameraPlayerYOffset, mainCamera.transform.position.z);
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, cameraLerpSpeed);
+        if (Mathf.Abs(mainCamera.transform.position.y - targetPosition.y) < 0.1f)
+        {
+            cameraFollow = false; //Stop following when close enough
+            finishJump.Invoke(); //Invoke finish jump event
         }
     }
 
