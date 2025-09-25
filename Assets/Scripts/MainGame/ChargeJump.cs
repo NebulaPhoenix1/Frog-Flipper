@@ -14,8 +14,10 @@ public class ChargeJump : MonoBehaviour
     [SerializeField] private float minJumpForce = 5.0f;
     [SerializeField] private float maxJumpForce = 20.0f;
     [SerializeField] private float jumpStopDelay = 0.1f; //Delay before jump force stops being applied
+    [Header("Camera Settings")]
     [SerializeField] private float cameraPlayerYOffset = -10.0f; //Camera offset on Y axis when following player
     [SerializeField] private float cameraLerpSpeed = 0.01f;
+    [Header("SlingShot Mode")]
     [SerializeField] private bool slingShotMode = false; //If true, jump direction is opposite to mouse/touch position
     [SerializeField] private LayerMask slingshotRaycastLayerMask; //Layer mask for raycast in slingshot mode (layers we want the raycast to hit)
     private float currentChargeTime = 0.0f; //How long current jump has been charged
@@ -30,6 +32,7 @@ public class ChargeJump : MonoBehaviour
     void Start()
     {
         chargeJumpAction = InputSystem.actions.FindAction("Jump"); //Get action for jump (left mouse)
+        chargeJumpAction.Enable(); 
         rb = GetComponent<Rigidbody2D>();
         lineRenderer = GetComponent<LineRenderer>();
 

@@ -45,7 +45,7 @@ public class ImageFadeAlpha : MonoBehaviour
                 // The fade is complete
                 isFading = false;
                 Debug.Log("Fade complete");
-                SceneManager.LoadScene("Scenes/Main game");
+                //SceneManager.LoadScene("Scenes/Main game");
                 onFadeComplete.Invoke();
             }
         }

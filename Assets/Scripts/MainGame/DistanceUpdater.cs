@@ -8,10 +8,16 @@ public class DistanceUpdater : MonoBehaviour
     private GameObject player;
     private TMP_Text text;
     private float oldDist = 0.0f;
+    [SerializeField] private bool endDisplay = false;
     void Start()
     {
         player = GameObject.Find("Player");
         text = GetComponent<TMP_Text>();
+        if(endDisplay)
+        {
+            float dist = Mathf.Round(player.transform.position.y);
+            text.text = "Final Distance: " + dist.ToString() + "m";
+        }
     }
 
 
